@@ -101,12 +101,11 @@ function! ghcmod#util#check_version(version) "{{{
       return 1
     endif
   endfor
-  return 1
 endfunction "}}}
 
 function! ghcmod#util#ghc_mod_version() "{{{
   if !exists('s:ghc_mod_version')
-    let l:ghcmod = vimproc#system(['ghc-mod','version'])
+    let l:ghcmod = vimproc#system([ghcmod#config#get_options()['ghcmod_cmd'],'version'])
     let l:m = matchlist(l:ghcmod, 'version \(\d\+\)\.\(\d\+\)\.\(\d\+\)')
     if empty(l:m)
       if match(l:ghcmod, 'version 0 ') == -1
@@ -122,6 +121,26 @@ function! ghcmod#util#ghc_mod_version() "{{{
     endif
   endif
   return s:ghc_mod_version
+endfunction "}}}
+
+function! ghcmod#util#ghc_modi_version() "{{{
+  if !exists('s:ghc_modi_version')
+    let l:ghcmodi = call vimproc#system([ghcmod#config#get_options()['ghcmodi_cmd'],'version'])
+    let l:m = matchlist(l:ghcmodi, 'version \(\d\+\)\.\(\d\+\)\.\(\d\+\)')
+    if empty(l:m)
+      if match(l:ghcmodi, 'version 0 ') == -1
+        call ghcmod#util#print_error(printf('ghcmod-vim: Cannot detect ghc-mod version from %s', l:ghcmodi))
+      else
+        " 'version 0' means master
+        " https://github.com/eagletmt/ghcmod-vim/issues/66
+        let s:ghc_modi_version = [0, 0, 0]
+      endif
+    else
+      let s:ghc_modi_version = l:m[1 : 3]
+      call map(s:ghc_modi_version, 'str2nr(v:val)')
+    endif
+  endif
+  return s:ghc_modi_version
 endfunction "}}}
 
 " vim: set ts=2 sw=2 et fdm=marker:

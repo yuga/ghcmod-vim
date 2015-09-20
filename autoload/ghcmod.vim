@@ -179,14 +179,33 @@ function! ghcmod#async_make(type, path, callback) "{{{
   endif
 endfunction "}}}
 
+function! ghcmod#interact_make(type, path) "{{{
+  try
+    let l:args = s:build_make_command(a:type, a:path)
+    lcd `=ghcmod#basedir()`
+    let l:lines = ghcmod#interact#send(l:args[1,-1])
+    lcd -
+    return ghcmod#parse_make(readfile(l:tmpfile), b:ghcmod_basedir)
+  catch
+    call ghcmod#util#print_error(printf('%s %s', v:throwpoint, v:exception))
+  endtry
+endfunction "}}}
+
 function! ghcmod#expand(path) "{{{
   let l:dir = fnamemodify(a:path, ':h')
 
   let l:qflist = []
   let l:cmd = ghcmod#build_command(['expand', "-b '\n'", a:path])
+"<<<<<<< HEAD
   for l:line in split(ghcmod#system(l:cmd), '\n')
     let l:line = s:remove_dummy_prefix(l:line)
 
+"=======
+"  lcd `=ghcmod#basedir()`
+"  let l:lines = ghcmod#system(l:cmd)
+"  lcd -
+"  for l:line in split(l:lines, '\n')
+">>>>>>> save
     " path:line:col1-col2: message
     " or path:line:col: message
     let l:m = matchlist(l:line, '^\s*\(\(\f\| \)\+\):\(\d\+\):\(\d\+\)\%(-\(\d\+\)\)\?\%(:\s*\(.*\)\)\?$')

@@ -22,7 +22,8 @@ endif
 if !exists('s:has_ghc_mod')
   let s:has_ghc_mod = 0
 
-  if !executable('ghc-mod')
+  let s:options = ghcmod#config#load_ghcmod_options()
+  if !has_key(s:options, 'ghcmod_cmd')
     call ghcmod#util#print_error('ghcmod: ghc-mod is not executable!')
     finish
   endif
