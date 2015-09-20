@@ -105,7 +105,9 @@ endfunction "}}}
 
 function! ghcmod#util#ghc_mod_version() "{{{
   if !exists('s:ghc_mod_version')
-    let l:ghcmod = vimproc#system([ghcmod#config#get_options()['ghcmod_cmd'],'version'])
+    let l:cmd = copy(ghcmod#config#get_options()['ghcmod_cmd'])
+    call extend(l:cmd, ['version'])
+    let l:ghcmod = vimproc#system(l:cmd)
     let l:m = matchlist(l:ghcmod, 'version \(\d\+\)\.\(\d\+\)\.\(\d\+\)')
     if empty(l:m)
       if match(l:ghcmod, 'version 0 ') == -1
@@ -125,7 +127,9 @@ endfunction "}}}
 
 function! ghcmod#util#ghc_modi_version() "{{{
   if !exists('s:ghc_modi_version')
-    let l:ghcmodi = call vimproc#system([ghcmod#config#get_options()['ghcmodi_cmd'],'version'])
+    let l:cmd = copy(ghcmod#config#get_options()['ghcmodi_cmd'])
+    call extend(l:cmd, ['version'])
+    let l:ghcmod = vimproc#system(l:cmd)
     let l:m = matchlist(l:ghcmodi, 'version \(\d\+\)\.\(\d\+\)\.\(\d\+\)')
     if empty(l:m)
       if match(l:ghcmodi, 'version 0 ') == -1
