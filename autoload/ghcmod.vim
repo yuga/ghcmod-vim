@@ -287,7 +287,7 @@ function! ghcmod#build_command(args) "{{{
     call extend(l:cmd, ['-g', l:opt])
   endfor
   call extend(l:cmd, a:args)
-  echomsg string(l:cmd)
+  "echomsg string(l:cmd)
   return l:cmd
 endfunction "}}}
 
