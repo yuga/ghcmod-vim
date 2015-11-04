@@ -6,7 +6,7 @@ if !exists('g:ghcmod_vim_config_file')
     let g:ghcmod_vim_config_file = '.ghcmod_vim_config'
 endif
 
-let b:ghcmod_options = {}
+let g:ghcmod_options = {}
 
 function! s:LoadConfigFile()
   if filereadable(expand(g:ghcmod_vim_config_file))
@@ -15,20 +15,20 @@ function! s:LoadConfigFile()
 endfunction
 
 function! ghcmod#config#get_options()
-  return b:ghcmod_options
+  return g:ghcmod_options
 endfunction
 
 function! ghcmod#config#load_ghcmod_options()
-  let l:options = { 'ghcmod_cmd': 'ghc-mod', 'ghcmodi_cmd': 'ghc-modi' }
+  let l:options = { 'ghcmod_cmd': ['ghc-mod'], 'ghcmodi_cmd': ['ghc-modi'] }
 
   if g:ghcmod_vim_config_file_enabled
-    call s:LoadConfigFile()
-    if exists('g:ghc_mod_cmd')
-        let l:options['ghcmod_cmd'] = g:ghc_mod_cmd
-    endif
-    if exists('g:ghc_modi_cmd')
-        let l:options['ghcmodi_cmd'] = g:ghc_modi_cmd
-    endif
+      call s:LoadConfigFile()
+      if exists('g:ghc_mod_cmd')
+          let l:options['ghcmod_cmd'] = g:ghc_mod_cmd
+      endif
+      if exists('g:ghc_modi_cmd')
+          let l:options['ghcmodi_cmd'] = g:ghc_modi_cmd
+      endif
   endif
 
   if !executable(l:options['ghcmod_cmd'][0])
@@ -40,7 +40,7 @@ function! ghcmod#config#load_ghcmod_options()
       remove(l:options, 'ghcmodi_cmd')
   endif
     
-  let b:ghcmod_options = l:options
+  let g:ghcmod_options = l:options
   return l:options
 endfunction
 

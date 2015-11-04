@@ -195,17 +195,9 @@ function! ghcmod#expand(path) "{{{
   let l:dir = fnamemodify(a:path, ':h')
 
   let l:qflist = []
-  let l:cmd = ghcmod#build_command(['expand', "-b '\n'", a:path])
-"<<<<<<< HEAD
+  let l:cmd = ghcmod#build_command(['-b', '\n', 'expand', a:path])
   for l:line in split(ghcmod#system(l:cmd), '\n')
     let l:line = s:remove_dummy_prefix(l:line)
-
-"=======
-"  lcd `=ghcmod#basedir()`
-"  let l:lines = ghcmod#system(l:cmd)
-"  lcd -
-"  for l:line in split(l:lines, '\n')
-">>>>>>> save
     " path:line:col1-col2: message
     " or path:line:col: message
     let l:m = matchlist(l:line, '^\s*\(\(\f\| \)\+\):\(\d\+\):\(\d\+\)\%(-\(\d\+\)\)\?\%(:\s*\(.*\)\)\?$')
@@ -295,6 +287,7 @@ function! ghcmod#build_command(args) "{{{
     call extend(l:cmd, ['-g', l:opt])
   endfor
   call extend(l:cmd, a:args)
+  echomsg string(l:cmd)
   return l:cmd
 endfunction "}}}
 
