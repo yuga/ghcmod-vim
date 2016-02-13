@@ -33,11 +33,11 @@ function! ghcmod#config#load_ghcmod_options()
 
   if !executable(l:options['ghcmod_cmd'][0])
       call ghcmod#util#print_error('ghcmod: ghc-mod is not executable!')
-      remove(l:options, 'ghcmod_cmd')
+      call remove(l:options, 'ghcmod_cmd')
   endif
   if !executable(l:options['ghcmodi_cmd'][0])
       call ghcmod#util#print_error('ghcmod: ghc-modi is not executable!')
-      remove(l:options, 'ghcmodi_cmd')
+      call remove(l:options, 'ghcmodi_cmd')
   endif
     
   let g:ghcmod_options = l:options
